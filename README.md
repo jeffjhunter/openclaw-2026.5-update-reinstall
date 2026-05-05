@@ -1,5 +1,9 @@
 # OpenClaw 2026.5+ Update Reinstall
 
+> **More OpenClaw + AI resources:**
+> - [aimoneygroup.com](https://aimoneygroup.com) — your home for OpenClaw walkthroughs, AI agent setups, and making money with AI.
+> - [TheTip.ai](https://TheTip.ai) — free newsletter: AI news, tips, prompts, and more, delivered weekly.
+
 A field-tested recovery runbook for OpenClaw users who've upgraded
 through several versions and ended up in a half-broken state — agent
 generates replies in session storage but Discord channels never receive
@@ -564,7 +568,22 @@ Things this incident proved that aren't obvious from the docs:
 
 ## About / credits
 
-- **OpenClaw upstream:** <https://github.com/openclaw/openclaw>
+This guide is maintained as part of **[AI Money Group](https://aimoneygroup.com)** —
+the place to learn OpenClaw, build AI agents, and turn AI into income.
+
+### Keep going
+
+- **[aimoneygroup.com](https://aimoneygroup.com)** — OpenClaw setup
+  walkthroughs, AI agent playbooks, and proven Make-Money-With-AI
+  workflows. Start here if you're past the "fix it" stage and ready
+  to *use* OpenClaw to ship things.
+- **[TheTip.ai](https://TheTip.ai)** — a free newsletter for AI news,
+  tips, prompts, and tools you can use the same day you read them.
+  No fluff, no fake urgency, no $999 course pitches.
+
+### Upstream OpenClaw
+
+- **OpenClaw repo:** <https://github.com/openclaw/openclaw>
 - **OpenClaw docs:** <https://docs.openclaw.ai>
 - **OpenClaw Discord:** <https://discord.gg/clawd>
 
@@ -576,7 +595,8 @@ docs are authoritative — please open an issue or PR on this repo so
 we can keep it useful for the next person.
 
 If this guide saved you time, a star on the repo helps it surface for
-others stuck in the same spot.
+others stuck in the same spot, and **[subscribe to TheTip.ai](https://TheTip.ai)**
+to get the next AI fix before you're the one debugging it at 2 AM.
 
 ---
 
