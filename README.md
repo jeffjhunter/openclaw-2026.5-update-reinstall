@@ -547,6 +547,21 @@ Even on a fresh install, a couple of knobs commonly need tweaking:
   — pass `--dangerously-force-unsafe-install` (false positive on the
   env-var + network heuristic that every Discord client trips).
 
+- **A workspace skill never appears as available to the agent
+  ("I don't see a skill called X")** — check `openclaw skills info
+  <slug>`. If it shows `△ Needs setup` and `Visible to model: no`
+  with a `✗` next to one of the listed `Requirements: Config`
+  entries, the skill's frontmatter `requires.config` array uses
+  syntax the validator doesn't support. The validator only checks
+  whether a config path *exists* (truthy) — it does **not** support
+  `path=value` predicates. If you wrote
+  `"requires": {"config": ["tools.profile=full"]}`, change it to
+  just `"requires": {"config": ["tools.profile"]}` (or remove
+  the unenforceable check entirely). After the frontmatter is
+  fixed, the skill flips to `✓ Ready` / `Visible to model: yes`
+  on the next watcher pass — usually within a few seconds, no
+  gateway restart needed.
+
 - **Agent's reply shows in TUI but never lands in the Discord
   channel** — the wizard does not write a `messages` section by
   default, and 5.4's default for `messages.groupChat.visibleReplies`
