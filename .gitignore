@@ -1,0 +1,13 @@
+# Tooling artifacts
+.DS_Store
+*.swp
+*~
+
+# Backups produced by following the runbook
+openclaw-full-backup-*/
+openclaw-keep-*/
+*.tar.gz
+
+# Local notes / scratch
+NOTES.md
+TODO.md
