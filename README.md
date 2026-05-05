@@ -547,6 +547,27 @@ Even on a fresh install, a couple of knobs commonly need tweaking:
   — pass `--dangerously-force-unsafe-install` (false positive on the
   env-var + network heuristic that every Discord client trips).
 
+- **Agent's reply shows in TUI but never lands in the Discord
+  channel** — the wizard does not write a `messages` section by
+  default, and 5.4's default for `messages.groupChat.visibleReplies`
+  doesn't auto-deliver assistant replies to the originating
+  channel. You'll see the agent generate a reply (often prefixed
+  with `[[reply_to_current]]`) in the session jsonl, the TUI
+  renders it, but Discord never receives the message. Fix:
+  ```jsonc
+  "messages": {
+    "ackReactionScope": "group-mentions",
+    "statusReactions": { "enabled": true },
+    "groupChat": { "visibleReplies": "automatic" }
+  }
+  ```
+  Valid values for `visibleReplies` are
+  `"automatic" | "message_tool" | true | false` — `"automatic"` is
+  the right pick for normal chat-style usage. After saving, restart
+  the gateway. (`true` works the same; `"message_tool"` requires
+  the agent to explicitly call a send-message tool, which is more
+  fragile.)
+
 - **Image attachments never deliver to Discord / OpenAI image
   generation does nothing** — the `sharp` Node image-processing
   library is an optional dep that's not installed by default. See
