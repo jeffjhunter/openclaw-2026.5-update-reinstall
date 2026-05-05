@@ -42,6 +42,7 @@ and confirmed working on the OpenClaw 2026.5 line.
   - [Step 8.5 — approve device pairing for TUI / web dashboard](#step-85--approve-device-pairing-for-tui--web-dashboard)
   - [Step 8.6 — paste gateway auth token into the web dashboard](#step-86--paste-gateway-auth-token-into-the-web-dashboard)
   - [Step 8.7 — restore optional features via the web dashboard](#step-87--restore-optional-features-via-the-web-dashboard)
+  - [Step 8.8 — install `sharp` for image features](#step-88--install-sharp-for-image-features)
   - [Step 9 — verify](#step-9--verify)
 - [Troubleshooting after the clean install](#troubleshooting-after-the-clean-install)
 - [Lessons learned](#lessons-learned)
@@ -442,6 +443,40 @@ exec-ask mode) only appear in the dashboard's settings panels. Plan
 on a 3-minute walk through the dashboard after `onboard` to flip the
 ones you want.
 
+### Step 8.8 — install `sharp` for image features
+
+`sharp` is the Node image-processing library OpenClaw uses to compose,
+resize, encode, and forward images. It's an **optional** dependency in
+the npm package, so a clean install does not include it. Without
+`sharp`, the following silently fail:
+
+- Posting image attachments to Discord
+- Forwarding a reference photo to OpenAI's image generator
+- Any agent reply that produces a generated image
+
+The symptom looks like the agent confidently saying "here it is" with
+no attachment ever appearing in the channel — or, if you ask the agent
+to inspect, an internal `Cannot find module 'sharp'` / "missing
+optional media dependency" error.
+
+Install it into the openclaw global package:
+
+```bash
+cd "$(npm root -g)/openclaw"
+npm install sharp
+openclaw gateway restart
+```
+
+Verify:
+
+```bash
+ls "$(npm root -g)/openclaw/node_modules/sharp/package.json" && \
+    echo "sharp ok"
+```
+
+Re-test with a prompt like "make me a graphic of X using OpenAI's image
+generator and attach it" — should now deliver a real attachment.
+
 ### Step 9 — verify
 
 ```bash
@@ -511,6 +546,12 @@ Even on a fresh install, a couple of knobs commonly need tweaking:
 - **`@openclaw/discord` install rejected as "credential harvesting"**
   — pass `--dangerously-force-unsafe-install` (false positive on the
   env-var + network heuristic that every Discord client trips).
+
+- **Image attachments never deliver to Discord / OpenAI image
+  generation does nothing** — the `sharp` Node image-processing
+  library is an optional dep that's not installed by default. See
+  [Step 8.8](#step-88--install-sharp-for-image-features) for the
+  one-command fix.
 
 - **`discord: skipping guild message reason: "no-mention"` for
   messages you know contain a mention** — usually means the mention
