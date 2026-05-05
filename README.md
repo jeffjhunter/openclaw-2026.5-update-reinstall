@@ -37,6 +37,7 @@ and confirmed working on the OpenClaw 2026.5 line.
   - [Step 8 — restore identity (no-op if you did a surgical wipe)](#step-8--restore-identity-no-op-if-you-did-a-surgical-wipe)
   - [Step 8.5 — approve device pairing for TUI / web dashboard](#step-85--approve-device-pairing-for-tui--web-dashboard)
   - [Step 8.6 — paste gateway auth token into the web dashboard](#step-86--paste-gateway-auth-token-into-the-web-dashboard)
+  - [Step 8.7 — restore optional features via the web dashboard](#step-87--restore-optional-features-via-the-web-dashboard)
   - [Step 9 — verify](#step-9--verify)
 - [Troubleshooting after the clean install](#troubleshooting-after-the-clean-install)
 - [Lessons learned](#lessons-learned)
@@ -380,6 +381,62 @@ Then in the dashboard:
 The dashboard persists it in `localStorage` keyed to the gateway URL,
 so subsequent reloads stay authorized. If you change ports or rotate
 the token in the config, you'll need to repaste.
+
+### Step 8.7 — restore optional features via the web dashboard
+
+A clean install through `onboard` / `configure` leaves several useful
+features off by default. Open `http://127.0.0.1:18789/` and turn these
+back on if you used them before:
+
+#### Infrastructure → Browser
+
+Toggle **Browser Enabled**. This is what lets the agent drive a real
+browser (puppeteer-style automation, page rendering, web research) in
+addition to plain HTTP fetch. Persists as:
+
+```jsonc
+"browser": { "enabled": true }
+```
+
+You also need the bundled `browser` plugin enabled — most clean
+installs include it under `plugins.entries.browser.enabled: true`. If
+not, add it.
+
+#### AI & Agents → Tools tab
+
+- **Tool Profile** → set to `full`. Anything less restricts the agent
+  to a smaller toolset (basic chat / coding only). Persists as:
+  ```jsonc
+  "tools": { "profile": "full" }
+  ```
+
+- **Exec Ask** → set to `off` *(optional, your taste)*. Default `on`
+  prompts the agent for confirmation before running shell commands.
+  Setting `off` lets the agent run commands without interrupting the
+  conversation — convenient if you trust your agent + workspace, but
+  do **not** flip this on a multi-tenant or untrusted host. Persists
+  as:
+  ```jsonc
+  "tools": { "exec": { "ask": "off" } }
+  ```
+
+#### Tools → Links
+
+- **Enable Link Understanding** — turns on the agent's ability to
+  fetch + parse URLs that show up in conversation. Without this, the
+  agent sees a URL as a literal string, not as a fetchable resource.
+  Persists as:
+  ```jsonc
+  "tools": { "links": { "enabled": true } }
+  ```
+
+#### Why these are dashboard-only steps
+
+The `openclaw onboard` wizard does *not* expose every tool toggle —
+some surfaces (browser auto-enable, link understanding, the precise
+exec-ask mode) only appear in the dashboard's settings panels. Plan
+on a 3-minute walk through the dashboard after `onboard` to flip the
+ones you want.
 
 ### Step 9 — verify
 
